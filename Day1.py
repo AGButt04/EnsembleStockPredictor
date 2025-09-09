@@ -45,9 +45,9 @@ if isinstance(appleData.columns, pd.MultiIndex):
 for col in ['Close', 'High', 'Low', 'Open', 'Volume']:
     appleData[col] = pd.to_numeric(appleData[col])
 
-# print(appleData.isnull().sum())
-#
-# print(appleData.columns.to_list())
+print(appleData.isnull().sum())
+
+print(appleData.columns.to_list())
 
 closing = appleData['Close']
 closingPrices = closing.tolist()
@@ -86,9 +86,9 @@ print(f"Positive changes: {positives}, Negative changes: {negatives}")
 # print(appleData[['Close', 'Daily_Change']].head(10))
 
 # Plotting the closing prices to see the trends
-# closing.plot(title="Closing Prices - Apple Last Year")
-# plt.ylabel("$Price")
-# plt.show()
+closing.plot(title="Closing Prices - Apple Last Year")
+plt.ylabel("$Price")
+plt.show()
 
 if __name__ == "__main__":
     # Your main code execution
