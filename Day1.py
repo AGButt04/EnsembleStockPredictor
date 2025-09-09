@@ -4,8 +4,6 @@ import yfinance as yf
 import matplotlib.pyplot as plt
 import os
 
-from numpy.ma.core import negative
-
 # Step 2: Try downloading Apple stock data
 print("Starting stock data exploration...")
 
