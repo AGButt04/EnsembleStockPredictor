@@ -15,6 +15,10 @@
 # print("\nFirst few values of Close column:")
 # print(appleData['Close'].head())
 
+# Pandas can do this automatically
+# appleData['Daily_Change'] = appleData['Close'].diff()
+# print(appleData[['Close', 'Daily_Change']].head(10))
+
 # Plotting Closing Price
 # plt.figure(figsize=(14, 8))
 #
