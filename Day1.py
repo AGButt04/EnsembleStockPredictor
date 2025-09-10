@@ -27,10 +27,6 @@ if isinstance(appleData.columns, pd.MultiIndex):
 for col in ['Close', 'High', 'Low', 'Open', 'Volume']:
     appleData[col] = pd.to_numeric(appleData[col])
 
-# print(appleData.isnull().sum())
-#
-# print(appleData.columns.to_list())
-
 closing = appleData['Close']
 closingPrices = closing.tolist()
 positives = 0
@@ -99,6 +95,7 @@ print(appleData[['Close', 'target']].tail(10))
 print("Missing Values: ")
 print(appleData.isnull().sum())
 
+# Dropping the null values to clean the data for the model
 mlData = appleData.dropna()
 print(f"Our Dataset's shape: {mlData.shape}")
 
