@@ -23,29 +23,13 @@ else:
 if isinstance(appleData.columns, pd.MultiIndex):
     appleData.columns = appleData.columns.get_level_values(0)
 
-# Step 3: Explore the data
-# Try these pandas operations once you have the data:
-# - .head() to see first few rows
-# - .info() to see data types
-# - .describe() to see statistics
-# print(appleData.head())
-# print(appleData.info())
-# print(appleData.describe())
-
-# print(f"Data Shape: {appleData.shape}")
-# print(f"Columns: {appleData.columns}")
-# print(f"Data range: {appleData.index[0]} to {appleData.index[-1]}")
-# print("Data types:")
-# print(appleData.dtypes)
-# print("\nFirst few values of Close column:")
-# print(appleData['Close'].head())
 
 for col in ['Close', 'High', 'Low', 'Open', 'Volume']:
     appleData[col] = pd.to_numeric(appleData[col])
 
-print(appleData.isnull().sum())
-
-print(appleData.columns.to_list())
+# print(appleData.isnull().sum())
+#
+# print(appleData.columns.to_list())
 
 closing = appleData['Close']
 closingPrices = closing.tolist()
@@ -78,15 +62,46 @@ print(f"Average up day: ${up_avg:.2f}")
 print(f"Average down day: ${down_avg:.2f}")
 print(f"Positive changes: {positives}, Negative changes: {negatives}")
 
+# Calculating moving averages:
+MA_10 = closing.rolling(window=10).mean()
+MA_50 = closing.rolling(window=50).mean()
 
-# Pandas can do this automatically
-# appleData['Daily_Change'] = appleData['Close'].diff()
-# print(appleData[['Close', 'Daily_Change']].head(10))
+appleData['MA_10'] = MA_10
+appleData['MA_50'] = MA_50
 
-# Plotting the closing prices to see the trends
-closing.plot(title="Closing Prices - Apple Last Year")
-plt.ylabel("$Price")
-plt.show()
+print(appleData[['Close', 'MA_10', 'MA_50']].tail(10))
+
+# Adding volatility
+appleData['Daily_Return'] = appleData['Close'].pct_change()
+appleData['Volatility'] = appleData['Daily_Return'].rolling(window=10).std()
+print(appleData[['Close', 'Volatility']].tail(10))
+print("Daily returns of the last 5 days:")
+print(appleData['Daily_Return'].tail(5) * 100)
+
+# Adding Price Yesterday and Volume Yesterday as features
+appleData['Price_Yesterday'] = appleData['Close'].shift(1)
+appleData['Volume_Yesterday'] = appleData['Volume'].shift(1)
+print(appleData[['Close', 'Price_Yesterday']].tail(10))
+print(appleData[['Close', 'Volume_Yesterday']].tail(10))
+
+# Adding target columns which will have tomorrow's prices
+# which we want to predict using our model
+appleData['target'] = appleData['Close'].shift(-1)
+print(appleData[['Close', 'target']].tail(10))
+
+# Price features: Close, Price_Yesterday
+# Trend features: MA_10, MA_50
+# Volatility features: Daily_Return, Volatility_10
+# Volume features: Volume, Volume_Yesterday
+# Target: Target (tomorrow's closing price)
+
+# Checking how many null values are there and dropping them for our model
+print("Missing Values: ")
+print(appleData.isnull().sum())
+
+mlData = appleData.dropna()
+print(f"Our Dataset's shape: {mlData.shape}")
+
 
 if __name__ == "__main__":
     # Your main code execution
