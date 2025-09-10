@@ -65,14 +65,13 @@ MA_50 = closing.rolling(window=50).mean()
 appleData['MA_10'] = MA_10
 appleData['MA_50'] = MA_50
 
-print(appleData[['Close', 'MA_10', 'MA_50']].tail(10))
+appleData[['Close', 'MA_10', 'MA_50']].tail(10)
 
 # Adding volatility
 appleData['Daily_Return'] = appleData['Close'].pct_change()
 appleData['Volatility'] = appleData['Daily_Return'].rolling(window=10).std()
 print(appleData[['Close', 'Volatility']].tail(10))
 print("Daily returns of the last 5 days:")
-print(appleData['Daily_Return'].tail(5) * 100)
 
 # Adding Price Yesterday and Volume Yesterday as features
 appleData['Price_Yesterday'] = appleData['Close'].shift(1)
@@ -82,8 +81,8 @@ print(appleData[['Close', 'Volume_Yesterday']].tail(10))
 
 # Adding target columns which will have tomorrow's prices
 # which we want to predict using our model
-appleData['target'] = appleData['Close'].shift(-1)
-print(appleData[['Close', 'target']].tail(10))
+appleData['Price_Tomorrow'] = appleData['Close'].shift(-1)
+(appleData[['Close', 'Price_Tomorrow']].tail(10))
 
 # Price features: Close, Price_Yesterday
 # Trend features: MA_10, MA_50
@@ -92,12 +91,14 @@ print(appleData[['Close', 'target']].tail(10))
 # Target: Target (tomorrow's closing price)
 
 # Checking how many null values are there and dropping them for our model
-print("Missing Values: ")
-print(appleData.isnull().sum())
+# print("Missing Values: ")
+# print(appleData.isnull().sum())
 
 # Dropping the null values to clean the data for the model
 mlData = appleData.dropna()
 print(f"Our Dataset's shape: {mlData.shape}")
+print(mlData.head())
+print(mlData.describe())
 
 
 if __name__ == "__main__":
