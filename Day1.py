@@ -100,8 +100,8 @@ print(f"Our Dataset's shape: {mlData.shape}")
 print(mlData.head())
 print(mlData.describe())
 
-features = ['Close', 'Volume', 'Daily_Return', 'Price_Yesterday',
-            'Volume_Yesterday', 'MA_10', 'MA_50', 'Volatility']
+features = ['Close', 'Daily_Return', 'Price_Yesterday',
+            'MA_10', 'MA_50', 'Volatility']
 
 X = mlData[features]
 y = mlData['Price_Tomorrow']
@@ -124,6 +124,27 @@ print(f"Model Performance:")
 print(f"Mean Squared Error: ${mse:.2f}")
 print(f"R² Score: {r2:.4f}")
 print(f"Root Mean Squared Error: ${np.sqrt(mse):.2f}")
+
+# Checking important features:
+feature_importance = pd.DataFrame({
+    'features': features,
+    'coefficient': model.coef_
+})
+feature_importance['Abs_coefficient'] = abs(feature_importance['coefficient'])
+feature_importance = feature_importance.sort_values('Abs_coefficient', ascending=False)
+print("Feature importance:")
+print(feature_importance)
+
+# Dropping useless features after analysis - Volume and Volume Yesterday.
+
+# Create prediction vs actual plot
+plt.figure(figsize=(12, 6))
+plt.scatter(y_test, y_pred, alpha=0.7)
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
+plt.xlabel('Actual Price')
+plt.ylabel('Predicted Price')
+plt.title('Actual vs Predicted Stock Prices')
+plt.show()
 
 
 if __name__ == "__main__":
