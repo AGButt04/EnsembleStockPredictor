@@ -100,7 +100,7 @@ print(f"Our Dataset's shape: {mlData.shape}")
 print(mlData.head())
 print(mlData.describe())
 
-features = ['Close', 'Volume', 'Daily_Return', 'Price_Yesterday', 'Price_Tomorrow',
+features = ['Close', 'Volume', 'Daily_Return', 'Price_Yesterday',
             'Volume_Yesterday', 'MA_10', 'MA_50', 'Volatility']
 
 X = mlData[features]
@@ -109,6 +109,21 @@ y = mlData['Price_Tomorrow']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 print(f"Training set shape: {X_train.shape}")
 print(f"Test set shape: {X_test.shape}")
+
+# Training the model and first predictions
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"Model Performance:")
+print(f"Mean Squared Error: ${mse:.2f}")
+print(f"R² Score: {r2:.4f}")
+print(f"Root Mean Squared Error: ${np.sqrt(mse):.2f}")
 
 
 if __name__ == "__main__":
