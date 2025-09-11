@@ -47,3 +47,7 @@
 #
 # plt.tight_layout()
 # plt.show()
+
+# Checking how many null values are there and dropping them for our model
+# print("Missing Values: ")
+# print(appleData.isnull().sum())
