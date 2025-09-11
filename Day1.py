@@ -1,8 +1,12 @@
 # Step 1: Import libraries
 import pandas as pd
 import yfinance as yf
-import matplotlib.pyplot as plt
 import os
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
 
 # Step 2: Try downloading Apple stock data
 print("Starting stock data exploration...")
@@ -90,15 +94,21 @@ appleData['Price_Tomorrow'] = appleData['Close'].shift(-1)
 # Volume features: Volume, Volume_Yesterday
 # Target: Target (tomorrow's closing price)
 
-# Checking how many null values are there and dropping them for our model
-# print("Missing Values: ")
-# print(appleData.isnull().sum())
-
 # Dropping the null values to clean the data for the model
 mlData = appleData.dropna()
 print(f"Our Dataset's shape: {mlData.shape}")
 print(mlData.head())
 print(mlData.describe())
+
+features = ['Close', 'Volume', 'Daily_Return', 'Price_Yesterday', 'Price_Tomorrow',
+            'Volume_Yesterday', 'MA_10', 'MA_50', 'Volatility']
+
+X = mlData[features]
+y = mlData['Price_Tomorrow']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print(f"Training set shape: {X_train.shape}")
+print(f"Test set shape: {X_test.shape}")
 
 
 if __name__ == "__main__":
