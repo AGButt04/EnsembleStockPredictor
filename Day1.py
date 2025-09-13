@@ -114,9 +114,7 @@ print(f"Test set shape: {X_test.shape}")
 # Training the model and first predictions
 model1 = LinearRegression()
 model1.fit(X_train, y_train)
-
 y_pred1 = model1.predict(X_test)
-
 # Evaluate the model
 mse_1 = mean_squared_error(y_test, y_pred1)
 r2_1 = r2_score(y_test, y_pred1)
@@ -133,20 +131,19 @@ feature_importance = pd.DataFrame({
 })
 feature_importance['Abs_coefficient'] = abs(feature_importance['coefficient'])
 feature_importance = feature_importance.sort_values('Abs_coefficient', ascending=False)
-# print("Feature importance:")
-# print(feature_importance)
+print("Feature importance:")
+print(feature_importance)
 
 # Dropping useless features after analysis - Volume and Volume Yesterday.
 
 # Developing a second random forest model to see the results and the comparison
 model2 = RandomForestRegressor()
 model2.fit(X_train, y_train)
-
 y_pred2 = model2.predict(X_test)
-
+# Evaluate the model
 mse_2 = mean_squared_error(y_test, y_pred2)
 r2_2 = r2_score(y_test, y_pred2)
-# Evaluate ensemble properly
+
 print(f"Random forest Performance:")
 print(f"Mean Squared Error: ${mse_2:.2f}")
 print(f"R² Score: {r2_2:.4f}")
@@ -155,6 +152,7 @@ print(f"Root Mean Squared Error: ${np.sqrt(mse_2):.2f}")
 # Third model would be the average predictions of both models
 # Simple ensemble - average both predictions
 ensemble_pred = (y_pred1 + y_pred2) / 2
+# Evaluate the model
 ensemble_mse = mean_squared_error(y_test, ensemble_pred)
 ensemble_r2 = r2_score(y_test, ensemble_pred)
 
