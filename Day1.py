@@ -133,30 +133,52 @@ feature_importance = pd.DataFrame({
 })
 feature_importance['Abs_coefficient'] = abs(feature_importance['coefficient'])
 feature_importance = feature_importance.sort_values('Abs_coefficient', ascending=False)
-print("Feature importance:")
-print(feature_importance)
+# print("Feature importance:")
+# print(feature_importance)
 
 # Dropping useless features after analysis - Volume and Volume Yesterday.
-
-# Create prediction vs actual plot
-plt.figure(figsize=(12, 6))
-plt.scatter(y_test, y_pred, alpha=0.7)
-plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
-plt.xlabel('Actual Price')
-plt.ylabel('Predicted Price')
-plt.title('Actual vs Predicted Stock Prices (Linear)')
-plt.show()
 
 # Developing a second random forest model to see the results and the comparison
 model2 = RandomForestRegressor()
 model2.fit(X_train, y_train)
+
 y_pred2 = model2.predict(X_test)
+
 mse_2 = mean_squared_error(y_test, y_pred2)
 r2_2 = r2_score(y_test, y_pred2)
+# Evaluate ensemble properly
 print(f"Random forest Performance:")
 print(f"Mean Squared Error: ${mse_2:.2f}")
 print(f"R² Score: {r2_2:.4f}")
 print(f"Root Mean Squared Error: ${np.sqrt(mse_2):.2f}")
+
+# Third model would be the average predictions of both models
+# Simple ensemble - average both predictions
+ensemble_pred = (y_pred1 + y_pred2) / 2
+ensemble_mse = mean_squared_error(y_test, ensemble_pred)
+ensemble_r2 = r2_score(y_test, ensemble_pred)
+
+print(f"Ensemble Performance:")
+print(f"Mean Squared Error: ${ensemble_mse:.2f}")
+print(f"R² Score: {ensemble_r2:.4f}")
+print(f"Root Mean Squared Error: ${np.sqrt(ensemble_mse):.2f}")
+
+# Visualizing all models
+plt.figure(figsize=(14, 8))
+# Linear Regression
+plt.scatter(y_test, y_pred1, alpha=0.7, label="Linear Regression", color='red')
+# Random Forest
+plt.scatter(y_test, y_pred2, alpha=0.7, label="Random Forest", color='blue')
+# Ensemble
+plt.scatter(y_test, ensemble_pred, alpha=0.7, label="Ensemble (Avg)", color='green')
+# Perfect prediction line
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2, label="Perfect Prediction")
+
+plt.xlabel('Actual Price')
+plt.ylabel('Predicted Price')
+plt.title('Actual vs Predicted Stock Prices (Linear, RF, Ensemble)')
+plt.legend()
+plt.show()
 
 
 
