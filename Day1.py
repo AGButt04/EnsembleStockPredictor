@@ -5,6 +5,7 @@ import os
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import numpy as np
 
@@ -111,24 +112,24 @@ print(f"Training set shape: {X_train.shape}")
 print(f"Test set shape: {X_test.shape}")
 
 # Training the model and first predictions
-model = LinearRegression()
-model.fit(X_train, y_train)
+model1 = LinearRegression()
+model1.fit(X_train, y_train)
 
-y_pred = model.predict(X_test)
+y_pred1 = model1.predict(X_test)
 
 # Evaluate the model
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+mse_1 = mean_squared_error(y_test, y_pred1)
+r2_1 = r2_score(y_test, y_pred1)
 
-print(f"Model Performance:")
-print(f"Mean Squared Error: ${mse:.2f}")
-print(f"R² Score: {r2:.4f}")
-print(f"Root Mean Squared Error: ${np.sqrt(mse):.2f}")
+print(f"Linear Model Performance:")
+print(f"Mean Squared Error: ${mse_1:.2f}")
+print(f"R² Score: {r2_1:.4f}")
+print(f"Root Mean Squared Error: ${np.sqrt(mse_1):.2f}")
 
 # Checking important features:
 feature_importance = pd.DataFrame({
     'features': features,
-    'coefficient': model.coef_
+    'coefficient': model1.coef_
 })
 feature_importance['Abs_coefficient'] = abs(feature_importance['coefficient'])
 feature_importance = feature_importance.sort_values('Abs_coefficient', ascending=False)
@@ -143,8 +144,20 @@ plt.scatter(y_test, y_pred, alpha=0.7)
 plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2)
 plt.xlabel('Actual Price')
 plt.ylabel('Predicted Price')
-plt.title('Actual vs Predicted Stock Prices')
+plt.title('Actual vs Predicted Stock Prices (Linear)')
 plt.show()
+
+# Developing a second random forest model to see the results and the comparison
+model2 = RandomForestRegressor()
+model2.fit(X_train, y_train)
+y_pred2 = model2.predict(X_test)
+mse_2 = mean_squared_error(y_test, y_pred2)
+r2_2 = r2_score(y_test, y_pred2)
+print(f"Random forest Performance:")
+print(f"Mean Squared Error: ${mse_2:.2f}")
+print(f"R² Score: {r2_2:.4f}")
+print(f"Root Mean Squared Error: ${np.sqrt(mse_2):.2f}")
+
 
 
 if __name__ == "__main__":
