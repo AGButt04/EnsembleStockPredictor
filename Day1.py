@@ -2,12 +2,13 @@
 import pandas as pd
 import yfinance as yf
 import os
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
-import numpy as np
+from sklearn.preprocessing import MinMaxScaler
 
 # Step 2: Try downloading Apple stock data
 print("Starting stock data exploration...")
@@ -177,6 +178,21 @@ plt.ylabel('Predicted Price')
 plt.title('Actual vs Predicted Stock Prices (Linear, RF, Ensemble)')
 plt.legend()
 plt.show()
+
+# Training the first Long Short-Term Memory Neural Network
+def create_sequences(data, seq_length):
+    X, y = [], []
+    for i in range(seq_length, len(data)):
+        X.append(data[i-seq_length : i])
+        y.append(data[i])
+
+    X = np.array(X)
+    y = np.array(y)
+    # Reshape for LSTM: (Samples, Seq_Length, features=1)
+    X = X.reshape(X, seq_length, 1)
+    y = y.reshape(-1, 1)
+    return X, y
+
 
 
 
