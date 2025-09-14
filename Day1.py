@@ -240,9 +240,24 @@ y_pred3 = model3.predict(X_test_temp)
 
 # Since data is scaled, convert it back
 y_pred3_unscaled = scaler.inverse_transform(y_pred3)
-y_pred3_scaled = scaler.inverse_transform(y_test_temp)
+y_test_unscaled = scaler.inverse_transform(y_test_temp)
 
 print("LSTM Model Training complete!")
+
+# Calculate LSTM performance metrics
+mse_3 = mean_squared_error(y_test_unscaled, y_pred3_unscaled)
+r2_3 = r2_score(y_test_unscaled, y_pred3_unscaled)
+
+print(f"LSTM Performance:")
+print(f"Mean Squared Error: ${mse_3:.2f}")
+print(f"R² Score: {r2_3:.4f}")
+print(f"Root Mean Squared Error: ${np.sqrt(mse_3):.2f}")
+
+# Compare all three models
+print(f"\n=== MODEL COMPARISON ===")
+print(f"Linear Regression R²: {r2_1:.4f}")
+print(f"Random Forest R²:     {r2_2:.4f}")
+print(f"LSTM R²:              {r2_3:.4f}")
 
 
 if __name__ == "__main__":
