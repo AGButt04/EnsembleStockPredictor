@@ -1,5 +1,6 @@
 # Step 1: Import libraries
 import pandas as pd
+import tensorflow
 import yfinance as yf
 import os
 import numpy as np
@@ -9,6 +10,8 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
+from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras import Sequential, Input
 
 # Step 2: Try downloading Apple stock data
 print("Starting stock data exploration...")
@@ -212,6 +215,34 @@ X_test_temp, y_test_temp = create_sequences(test_scaled.flatten(), seq_length)
 print(f"X_train_N: {X_train_N.shape} Y_train_N: {y_train_N.shape}")
 print(f"X_test_temp: {X_test_temp.shape} y_test_temp: {y_test_temp.shape}")
 
+# Build the model
+model3 = Sequential([
+    Input(shape=(seq_length,1)),
+    LSTM(50),
+    Dense(1)
+])
+
+model3.compile(optimizer='adam', loss='mse')
+print(model3.summary())
+
+# Training the model
+print("Training the LSTM model...")
+history = model3.fit(
+    X_train_N, y_train_N,
+    epochs=50, # Number of training rounds
+    batch_size=16, # Process 16 sequences in a round
+    validation_split=0.2, # Use 20% of training for validation
+    verbose=1 # Show progress
+)
+
+# Make predictions
+y_pred3 = model3.predict(X_test_temp)
+
+# Since data is scaled, convert it back
+y_pred3_unscaled = scaler.inverse_transform(y_pred3)
+y_pred3_scaled = scaler.inverse_transform(y_test_temp)
+
+print("LSTM Model Training complete!")
 
 
 if __name__ == "__main__":
