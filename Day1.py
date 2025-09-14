@@ -162,22 +162,22 @@ print(f"Mean Squared Error: ${ensemble_mse:.2f}")
 print(f"R² Score: {ensemble_r2:.4f}")
 print(f"Root Mean Squared Error: ${np.sqrt(ensemble_mse):.2f}")
 
-# Visualizing all models
-plt.figure(figsize=(14, 8))
-# Linear Regression
-plt.scatter(y_test, y_pred1, alpha=0.7, label="Linear Regression", color='red')
-# Random Forest
-plt.scatter(y_test, y_pred2, alpha=0.7, label="Random Forest", color='blue')
-# Ensemble
-plt.scatter(y_test, ensemble_pred, alpha=0.7, label="Ensemble (Avg)", color='green')
-# Perfect prediction line
-plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2, label="Perfect Prediction")
-
-plt.xlabel('Actual Price')
-plt.ylabel('Predicted Price')
-plt.title('Actual vs Predicted Stock Prices (Linear, RF, Ensemble)')
-plt.legend()
-plt.show()
+# # Visualizing all models
+# plt.figure(figsize=(14, 8))
+# # Linear Regression
+# plt.scatter(y_test, y_pred1, alpha=0.7, label="Linear Regression", color='red')
+# # Random Forest
+# plt.scatter(y_test, y_pred2, alpha=0.7, label="Random Forest", color='blue')
+# # Ensemble
+# plt.scatter(y_test, ensemble_pred, alpha=0.7, label="Ensemble (Avg)", color='green')
+# # Perfect prediction line
+# plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--', lw=2, label="Perfect Prediction")
+#
+# plt.xlabel('Actual Price')
+# plt.ylabel('Predicted Price')
+# plt.title('Actual vs Predicted Stock Prices (Linear, RF, Ensemble)')
+# plt.legend()
+# plt.show()
 
 # Training the first Long Short-Term Memory Neural Network
 def create_sequences(data, seq_length):
@@ -189,10 +189,28 @@ def create_sequences(data, seq_length):
     X = np.array(X)
     y = np.array(y)
     # Reshape for LSTM: (Samples, Seq_Length, features=1)
-    X = X.reshape(X, seq_length, 1)
+    X = X.reshape(X.shape[0], seq_length, 1)
     y = y.reshape(-1, 1)
     return X, y
 
+# Pipeline with train/test split (chronlogically)
+prices = mlData['Close'].values.reshape(-1, 1)
+test_size = int(len(prices) * 0.8)
+train_data = prices[:test_size]
+test_data = prices[test_size:]
+
+# Scaling the inputs for the smooth model
+scaler = MinMaxScaler()
+train_scaled = scaler.fit_transform(train_data)
+test_scaled = scaler.transform(test_data)
+
+# Creating sequences using the function
+seq_length = 10
+X_train_N, y_train_N = create_sequences(train_scaled.flatten(), seq_length)
+X_test_temp, y_test_temp = create_sequences(test_scaled.flatten(), seq_length)
+
+print(f"X_train_N: {X_train_N.shape} Y_train_N: {y_train_N.shape}")
+print(f"X_test_temp: {X_test_temp.shape} y_test_temp: {y_test_temp.shape}")
 
 
 
