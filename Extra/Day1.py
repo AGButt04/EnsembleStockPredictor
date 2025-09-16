@@ -17,9 +17,9 @@ from tensorflow.keras import Sequential, Input
 print("Starting stock data exploration...")
 
 # Your code goes here - try downloading AAPL data for the last year
-if os.path.exists('./data/apple_data.csv'):
+if os.path.exists('../data/apple_data.csv'):
     print("Apple data found, loading data...")
-    appleData = pd.read_csv("./data/apple_data.csv", index_col=0)
+    appleData = pd.read_csv("../data/apple_data.csv", index_col=0)
 else:
     print("Apple data not found, downloading...")
     appleData = yf.download(tickers="AAPL", period="1y")
