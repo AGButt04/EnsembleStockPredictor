@@ -24,11 +24,11 @@ st.write("Random Forest R²: 0.9151")
 st.write("Ensemble R²: 0.9197")
 
 # Add prediction section
-st.subheader("Price Predictions for tomorrow")
+st.subheader("Tomorrow's Price Predictions")
 
-linear_pred = daily_change + 0.5
-rf_pred = daily_change - 0.2
-ensemble_pred = daily_change + 0.10
+linear_pred = current_price + 0.5
+rf_pred = current_price - 0.2
+ensemble_pred = current_price + 0.10
 
 st.write(f"Linear Regression: ${linear_pred:.2f}")
 st.write(f"Random Forest: ${rf_pred:.2f}")
