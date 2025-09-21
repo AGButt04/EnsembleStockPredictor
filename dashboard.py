@@ -30,4 +30,6 @@ linear_pred = daily_change + 0.5
 rf_pred = daily_change - 0.2
 ensemble_pred = daily_change + 0.10
 
-
+st.write(f"Linear Regression: ${linear_pred:.2f}")
+st.write(f"Random Forest: ${rf_pred:.2f}")
+st.write(f"Ensemble: ${ensemble_pred:.2f}")
