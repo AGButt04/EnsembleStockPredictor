@@ -31,9 +31,31 @@ with col1:
     chart_data = recent_data[['Close', 'MA_10']].dropna()
     st.line_chart(chart_data)
 
+    # Add daily trading range info
+    st.write("**Daily Price Range (High - Low)**")
+    recent_data['Daily_Range'] = recent_data['High'] - recent_data['Low']
+    st.bar_chart(recent_data['Daily_Range'])
+
 with col2:
     st.write("**Volume**")
     st.bar_chart(recent_data["Volume"])
+
+# Add this after your columns, before the model performance section:
+st.subheader("Market Summary")
+
+col3, col4, col5 = st.columns(3)
+
+with col3:
+    avg_volume = recent_data['Volume'].mean()
+    st.metric("Average Volume (30d)", f"{avg_volume:,.0f}")
+
+with col4:
+    avg_range = recent_data['Daily_Range'].mean()
+    st.metric("Average Daily Range", f"${avg_range:.2f}")
+
+with col5:
+    volatility = recent_data['Close'].pct_change().std() * 100
+    st.metric("Price Volatility", f"{volatility:.1f}%")
 
 # Add a section for model predictions
 st.subheader("Model Performance")
