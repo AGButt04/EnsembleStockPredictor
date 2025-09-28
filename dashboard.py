@@ -5,8 +5,18 @@ st.set_page_config(page_title="Apple Stock", page_icon="📈", layout='wide')
 st.title("Apple Stock Dashboard")
 
 data = load_apple_data()
-current_price = data["Close"].iloc[-1]
-previous_price = data["Close"].iloc[-2]
+
+st.subheader("📅 Select Date Range")
+col_date1, col_date2 = st.columns(2)
+with col_date1:
+    start_date = st.date_input("Start Date", value=data.index[-60])
+with col_date2:
+    end_date = st.date_input("End Date", value=data.index[-1])
+
+filtered_data = data[str(start_date):str(end_date)]
+
+current_price = filtered_data["Close"].iloc[-1]
+previous_price = filtered_data["Close"].iloc[-2]
 daily_change = current_price - previous_price
 
 st.metric("Current Stock Price", f"${current_price:.2f}")
@@ -14,7 +24,7 @@ st.metric("Previous Stock Price", f"${previous_price:.2f}")
 st.metric("Price Change", f"${daily_change:.2f}", delta=daily_change)
 
 # Add the simple line chart and Volume bar chart for Analysis
-recent_data = data.tail(30)
+recent_data = filtered_data
 
 # Create columns to show charts side by side
 col1, col2 = st.columns(2)
