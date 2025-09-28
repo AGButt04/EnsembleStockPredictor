@@ -9,9 +9,15 @@ data = load_apple_data()
 st.subheader("📅 Select Date Range")
 col_date1, col_date2 = st.columns(2)
 with col_date1:
-    start_date = st.date_input("Start Date", value=data.index[-60])
+    start_date = st.date_input("Start Date",
+                               value=data.index[0],
+                               min_value=data.index[0],
+                               max_value=data.index[-1])
 with col_date2:
-    end_date = st.date_input("End Date", value=data.index[-1])
+    end_date = st.date_input("End Date",
+                             value=data.index[-1],
+                             min_value=data.index[0],
+                             max_value=data.index[-1])
 
 filtered_data = data[str(start_date):str(end_date)]
 
