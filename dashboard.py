@@ -9,10 +9,10 @@ import numpy as np
 def load_models():
     linear_model = joblib.load('models/linear_model.pkl')
     rf_model = joblib.load('models/random_forest_model.pkl')
-    lstm_model = joblib.load('models/lstm_model.pkl')
-    return linear_model, rf_model, lstm_model
+    # lstm_model = joblib.load('models/lstm_model.h5')
+    return linear_model, rf_model
 
-linear_model, rf_model, lstm_model = load_models()
+linear_model, rf_model = load_models()
 
 st.set_page_config(page_title="Apple Stock", page_icon="📈", layout='wide')
 st.title("Apple Stock Dashboard")
@@ -40,7 +40,7 @@ def make_prediction(data):
     """Make predictions using loaded models"""
     processed = create_features(data.copy())
 
-    features = ['Close', 'Daily_Return', 'Price_Yesterday'
+    features = ['Close', 'Daily_Return', 'Price_Yesterday',
                 'MA_10', 'MA_50', 'Volatility']
 
     if len(processed) == 0:
@@ -70,18 +70,41 @@ daily_change = current_price - previous_price
 st.subheader("Model Predictions")
 linear_pred, rf_pred, ensemble_pred = make_prediction(filtered_data)
 
-if selected_model == "Linear Regression":
-    st.write(f"**{selected_model} Prediction:** ${linear_pred:.2f}")
-    st.write("R² Score: 0.9162")
-elif selected_model == "Random Forest":
-    st.write(f"**{selected_model} Prediction:** ${rf_pred:.2f}")
-    st.write("R² Score: 0.9151")
-elif selected_model == "LSTM":
-    st.write(f"**{selected_model} Prediction:** Coming soon...")
-    st.write("R² Score: 0.5049")
-else:  # Ensemble
-    st.write(f"**{selected_model} Prediction:** ${ensemble_pred:.2f}")
-    st.write("R² Score: 0.9197 (Best Performance)")
+# Replace your old placeholder prediction section with this:
+st.subheader("Model Predictions")
+
+if linear_pred is not None:
+    if selected_model == "Linear Regression":
+        st.metric("Tomorrow's Predicted Price", f"${linear_pred:.2f}")
+        st.write("Model: Linear Regression")
+        st.write("R² Score: 0.9162")
+
+    elif selected_model == "Random Forest":
+        st.metric("Tomorrow's Predicted Price", f"${rf_pred:.2f}")
+        st.write("Model: Random Forest")
+        st.write("R² Score: 0.9151")
+
+    elif selected_model == "LSTM":
+        st.write("LSTM predictions coming soon...")
+        st.write("R² Score: 0.5049")
+
+    else:  # Ensemble
+        st.metric("Tomorrow's Predicted Price", f"${ensemble_pred:.2f}")
+        st.write("Model: Ensemble (Linear + Random Forest)")
+        st.write("R² Score: 0.9197 (Best Performance)")
+
+    # Show comparison of all models
+    st.write("---")
+    st.write("**All Model Predictions:**")
+    col_pred1, col_pred2, col_pred3 = st.columns(3)
+    with col_pred1:
+        st.write(f"Linear: ${linear_pred:.2f}")
+    with col_pred2:
+        st.write(f"Random Forest: ${rf_pred:.2f}")
+    with col_pred3:
+        st.write(f"Ensemble: ${ensemble_pred:.2f}")
+else:
+    st.error("Not enough data to make predictions. Please select a longer date range.")
 
 st.metric("Current Stock Price", f"${current_price:.2f}")
 st.metric("Previous Stock Price", f"${previous_price:.2f}")
