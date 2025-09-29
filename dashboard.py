@@ -1,5 +1,18 @@
 import streamlit as st
 from src.dataLoader import load_apple_data
+from src.dataLoader import load_apple_data
+from src.featureEngineering import create_features
+import joblib
+import numpy as np
+
+@st.cache_resource
+def load_models():
+    linear_model = joblib.load('models/linear_model.pkl')
+    rf_model = joblib.load('models/random_forest_model.pkl')
+    lstm_model = joblib.load('models/lstm_model.pkl')
+    return linear_model, rf_model, lstm_model
+
+linear_model, rf_model, lstm_model = load_models()
 
 st.set_page_config(page_title="Apple Stock", page_icon="📈", layout='wide')
 st.title("Apple Stock Dashboard")
@@ -23,6 +36,26 @@ end_date = st.sidebar.date_input("End Date",
 
 filtered_data = data[str(start_date):str(end_date)]
 
+def make_prediction(data):
+    """Make predictions using loaded models"""
+    processed = create_features(data.copy())
+
+    features = ['Close', 'Daily_Return', 'Price_Yesterday'
+                'MA_10', 'MA_50', 'Volatility']
+
+    if len(processed) == 0:
+        return None, None, None
+
+    X_latest = processed[features].iloc[-1:].values
+
+    # Make Predictions
+    linear_pred = linear_model.predict(X_latest)[0]
+    rf_pred = rf_model.predict(X_latest)[0]
+    ensemble_pred = (linear_pred + rf_pred) / 2
+
+    return linear_pred, rf_pred, ensemble_pred
+
+
 st.subheader("🤖 Model Selection")
 selected_model = st.sidebar.selectbox(
     "Choose Model for Analysis:",
@@ -35,9 +68,7 @@ daily_change = current_price - previous_price
 
 # Add a section for model predictions
 st.subheader("Model Predictions")
-linear_pred = current_price + 0.5
-rf_pred = current_price - 0.2
-ensemble_pred = current_price + 0.10
+linear_pred, rf_pred, ensemble_pred = make_prediction(filtered_data)
 
 if selected_model == "Linear Regression":
     st.write(f"**{selected_model} Prediction:** ${linear_pred:.2f}")
