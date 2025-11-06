@@ -1,12 +1,11 @@
 import sys
-import os
 sys.path.append('src')
 
 from sklearn.metrics import mean_squared_error, r2_score
-from dataLoader import load_apple_data
-from featureEngineering import create_features, prepare_model_data
-from models import train_linear_regression, train_random_forest, train_lstm, evaluate_model, save_model
-from ensemble import simple_ensemble, evaluate_ensemble
+from src.dataLoader import load_apple_data
+from src.featureEngineering import create_features, prepare_model_data
+from src.models import train_linear_regression, train_random_forest, train_lstm, evaluate_model, save_model
+from src.ensemble import simple_ensemble, evaluate_ensemble
 
 
 def main():
