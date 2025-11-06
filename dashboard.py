@@ -1,9 +1,7 @@
 import streamlit as st
 from src.dataLoader import load_apple_data
-from src.dataLoader import load_apple_data
 from src.featureEngineering import create_features
 import joblib
-import numpy as np
 
 @st.cache_resource
 def load_models():
@@ -17,7 +15,13 @@ linear_model, rf_model = load_models()
 st.set_page_config(page_title="Apple Stock", page_icon="📈", layout='wide')
 st.title("Apple Stock Dashboard")
 
-data = load_apple_data()
+# In your dashboard, add to sidebar:
+if st.sidebar.button("Refresh Data"):
+    data = load_apple_data(force_refresh=True)
+    st.rerun()
+else:
+    data = load_apple_data()
+
 
 # Add this near the top, after your imports but before the main content:
 st.sidebar.header("Dashboard Controls")
@@ -71,7 +75,6 @@ st.subheader("Model Predictions")
 linear_pred, rf_pred, ensemble_pred = make_prediction(filtered_data)
 
 # Replace your old placeholder prediction section with this:
-st.subheader("Model Predictions")
 
 if linear_pred is not None:
     if selected_model == "Linear Regression":
