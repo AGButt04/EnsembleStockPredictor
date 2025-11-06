@@ -2,20 +2,24 @@ import pandas as pd
 import yfinance as yf
 import os
 
-def load_apple_data():
+
+def load_apple_data(force_refresh=False):
     """Load Apple stock data, either from CSV or download fresh"""
-    if os.path.exists('./data/apple_data.csv'):
-        print("Apple data found, loading data...")
-        appleData = pd.read_csv("./data/apple_data.csv", index_col=0)
+    csv_path = './data/apple_data.csv'
+
+    if os.path.exists(csv_path) and not force_refresh:
+        print("Apple data found, loading from cache...")
+        appleData = pd.read_csv(csv_path, index_col=0)
     else:
-        print("Apple data not found, downloading...")
-        appleData = yf.download(tickers="AAPL", period="1y")
+        print("Downloading fresh data from Yahoo Finance...")
+        appleData = yf.download(tickers="AAPL", period="2y")  # Get 2 years
+
         # Flatten before saving
         if isinstance(appleData.columns, pd.MultiIndex):
             appleData.columns = appleData.columns.get_level_values(0)
-        appleData.to_csv('./data/apple_data.csv')
+        appleData.to_csv(csv_path)
 
-    # Also flatten after loading, just in case
+    # Flatten after loading
     if isinstance(appleData.columns, pd.MultiIndex):
         appleData.columns = appleData.columns.get_level_values(0)
 
