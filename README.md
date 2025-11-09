@@ -1,63 +1,77 @@
-# 📈 Ensemble Stock Prediction Platform
+# 🍎 Apple Stock Prediction and Backtesting Dashboard
 
-A machine learning system that predicts Apple (AAPL) stock prices using multiple algorithms and presents analysis through an interactive web dashboard.
+A machine learning–powered platform that predicts **Apple (AAPL)** stock prices, evaluates performance through **backtesting**, and visualizes results using an interactive **Streamlit dashboard**.
+
+---
 
 ## 🎯 Project Overview
 
-This project demonstrates an end-to-end ML pipeline for financial forecasting, combining:
-- **Multiple ML algorithms** (Linear Regression, Random Forest, LSTM neural networks)
-- **Ensemble methodology** for improved prediction accuracy
-- **Feature engineering** from raw stock data
-- **Interactive web dashboard** for real-time analysis
+This project demonstrates a complete **ML + Quant Research pipeline** for financial forecasting and strategy evaluation.  
+It combines multiple predictive models, feature engineering, and real-data backtesting to analyze how ML-based trading signals perform in the market.
 
-**Achievement**: 92% prediction accuracy (R² = 0.92) on test data using ensemble approach.
+### Core Highlights
+- **End-to-end ML pipeline** for financial time-series prediction  
+- **Multiple models:** Linear Regression, Random Forest, LSTM  
+- **Ensemble approach** for higher accuracy (R² ≈ 0.92)  
+- **Quant backtesting module** with Sharpe ratio, total return, and cumulative growth  
+- **Interactive dashboard** for real-time exploration and model evaluation  
+
+---
 
 ## 🛠️ Technical Stack
 
-- **Languages**: Python 3.9
-- **ML/Data**: scikit-learn, TensorFlow, pandas, numpy
-- **Data Source**: yfinance (Yahoo Finance API)
-- **Visualization**: Streamlit, matplotlib, plotly
-- **Deployment**: Streamlit Cloud
+- **Languages:** Python 3.9  
+- **ML/Data:** scikit-learn, TensorFlow, pandas, numpy  
+- **Data Source:** Yahoo Finance API (via `yfinance`)  
+- **Visualization:** Streamlit, matplotlib, plotly  
+- **Deployment:** Streamlit Cloud  
+---
 
-## 📊 Project Structure
-stock_predictor_ml/  
-├── data/                   # Stock price data  
-├── models/                 # Saved trained models  
-├── src/  
-│   ├── dataLoader.py        # Data acquisition  
-│   ├── featureEngineering.py # Feature creation  
-│   ├── models.py            # ML model training  
-│   └── ensemble.py          # Ensemble predictions  
-├── dashboard.py             # Streamlit web interface  
-├── main.py                  # Training pipeline  
-└── requirements.txt         # Dependencies  
+## 📁 Project Structure
+
+```bash
+stock_predictor_ml/
+├── data/                     # Stock price data  
+├── models/                   # Saved trained models  
+├── src/
+│   ├── dataLoader.py          # Data acquisition  
+│   ├── featureEngineering.py  # Feature creation  
+│   ├── models.py              # ML model training  
+│   └── ensemble.py            # Ensemble predictions  
+├── dashboard.py               # Streamlit web interface (Predictions + Backtesting)  
+├── main.py                    # Training pipeline  
+└── requirements.txt           # Dependencies  
+```
 
 ## 🔧 Features
 
-### Data Pipeline
-- Automated data downloading from Yahoo Finance
-- Feature engineering (moving averages, volatility, lag features)
-- Proper time-series train/test splitting
+### 🧩 Data Pipeline
+- Automated data download from Yahoo Finance  
+- Feature engineering (moving averages, lag returns, volatility)  
+- Chronological time-series train/test split  
 
-### ML Models
-1. **Linear Regression** - Captures linear trends and momentum  
-2. **Random Forest** - Handles non-linear patterns  
-3. **LSTM Neural Network** - Learns sequential patterns  
-4. **Ensemble** - Combines predictions for best performance  
+### 🤖 Machine Learning Models
+| Model | Purpose |
+|-------|----------|
+| **Linear Regression** | Captures linear trends and short-term momentum |
+| **Random Forest** | Handles non-linear dependencies |
+| **LSTM Neural Network** | Learns sequential temporal behavior |
+| **Ensemble** | Averages models for robust prediction accuracy |
 
-### Interactive Dashboard
-- Date range selection for custom analysis periods
-- Model comparison and selection
-- Real-time visualizations (price trends, volume, volatility)
-- Market summary statistics
+### 💹 Backtesting & Quant Analysis
+- Real ML-based signals converted into **long/short trades**  
+- Compute **daily returns**, **Sharpe ratio**, and **total profit**  
+- Compare **strategy vs buy-and-hold performance**  
+- Visualize **cumulative growth** and trade behavior  
+
+---
 
 ## 🚀 Getting Started
 
 ### Installation
 ```bash
-git clone https://github.com/yourusername/ensemble-stock-predictor
-cd ensemble-stock-predictor
+git clone https://github.com/yourusername/apple-stock-dashboard
+cd apple-stock-dashboard
 pip install -r requirements.txt
 ```
 
@@ -79,10 +93,10 @@ streamlit run dashboard.py
 | Ensemble          | 0.9197   | $5.18 |
 
 ## 🧠 Key Learnings
-- Feature engineering matters: Moving averages and volatility significantly improved predictions  
-- Ensemble superiority: Combining models reduced prediction error by ~5%  
-- Mean reversion patterns: Models learned that large daily moves often reverse  
-- Time-series validation: Chronological splitting prevents data leakage  
+- Feature engineering (MAs, volatility) significantly improves accuracy
+- Ensemble models outperform individual models by ~5%
+- Sharpe ratio backtests validate model consistency
+- Cumulative growth tracking helps quantify profitability
 
 ## ⚠️ Limitations & Disclaimer
 - Educational project only - not for actual trading  
@@ -91,11 +105,11 @@ streamlit run dashboard.py
 - Past performance does not guarantee future results  
 
 ## 🔮 Future Enhancements
-- Add sentiment analysis from financial news  
-- Implement more advanced neural architectures (Transformers)  
-- Multi-stock prediction capability  
-- Real-time data streaming  
-- Backtesting framework with transaction costs  
+- Integrate transaction cost simulation
+- Add max drawdown and Sortino ratio metrics
+- Extend to multi-stock portfolio backtesting
+- Incorporate sentiment or macroeconomic data
+- Experiment with Transformer-based price prediction 
 
 ## 👤 Author
 **Abdul Ghani Butt**  
@@ -105,5 +119,5 @@ Computer Science Sophomore @ Widener University
 ## 📝 License
 This project is for educational purposes.  
 
-Built as part of my journey to become an AI/ML Engineer.  
+Built as part of my journey to become an AI/ML or Quant Engineer.  
 
