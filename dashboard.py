@@ -47,8 +47,18 @@ def get_refresh_data(data):
 
 linear_model, rf_model = load_models()
 
-st.title("Apple Stock Dashboard")
-st.set_page_config(page_title="Apple Stock", page_icon="📈", layout='wide')
+st.set_page_config(page_title="Apple Stock Dashboard", page_icon="🍎", layout='wide')
+st.markdown(
+    """
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" width="40">
+        <h1 style="margin: 0;">Apple Stock Prediction and Backtesting Dashboard</h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+st.caption("Built with Machine Learning models and real stock data for quantitative analysis.")
+
 tabs = st.tabs(["📊 Predictions Dashboard", "💹 Backtesting"])
 
 
